@@ -1,14 +1,23 @@
+#!/usr/bin/env python
+# Created by Blake Simmons
+# Version 1.0
+from typing import List, Any
+
+
 def get_lowest_divisor(num, primes_list=[]):
     primes = primes_list
     divisor_range = int((num / 2) + 1)
-    if divisor_range > 1:
+    if num != 2:
+        is_divisible = False
         for divisor in range(2, divisor_range):
             if num % divisor == 0:
                 quotient = int(num / divisor)
                 primes.append(divisor)
+                is_divisible = True
                 get_lowest_divisor(quotient, primes)
                 break
-        primes.append(num)
+        if not is_divisible:
+            primes.append(num)
     else:
         primes.append(num)
 
@@ -16,11 +25,23 @@ def get_lowest_divisor(num, primes_list=[]):
 def get_prime_factors(num):
     prime_nums = []
     print('entered get_prime_factors')
-    get_lowest_divisor(num, prime_nums)
+    if int(num) >= 2 and str(num).isdigit():
+        get_lowest_divisor(int(num), prime_nums)
+    else:
+        raise Exception
     return prime_nums
 
 
-prime_factorization_list = get_prime_factors(243)
-print(prime_factorization_list)
-
-# print('\nResult: {}'.format(primes))
+if __name__ == '__main__':
+    while True:
+        num_entry = input('Please enter an integer greater or equal to 2 to factorize (\'Q\' to Exit): ')
+        if num_entry.lower() == 'q':
+            break
+        elif not num_entry.isdigit() or int(num_entry) < 2:
+            print('Invalid entry. '
+                  'Please enter an integer greater or equal to 2 (no letters, decimals or special characters).')
+            print()
+        else:
+            prime_factorization_list = get_prime_factors(int(num_entry))
+            print('The prime factors for ' + num_entry + ' are: ' + str(prime_factorization_list))
+            print()
